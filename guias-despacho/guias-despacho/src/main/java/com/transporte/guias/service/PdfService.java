@@ -2,6 +2,7 @@ package com.transporte.guias.service;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.transporte.guias.exception.BusinessException;
 import com.transporte.guias.model.GuiaDespacho;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 
@@ -25,16 +25,12 @@ public class PdfService {
     private static final Font NORMAL_FONT  = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL);
     private static final Font SMALL_FONT   = new Font(Font.FontFamily.HELVETICA, 9,  Font.ITALIC);
 
-    /**
-     * Genera el PDF de la guía en el EFS y retorna la ruta absoluta del archivo.
-     */
     public String generarPdf(GuiaDespacho guia) {
         String dirPath = buildDirPath(guia);
         String fileName = "guia_" + guia.getNumeroGuia() + ".pdf";
         String fullPath = dirPath + "/" + fileName;
 
         try {
-            // Crear directorios si no existen
             Files.createDirectories(Paths.get(dirPath));
 
             Document document = new Document(PageSize.A4);
