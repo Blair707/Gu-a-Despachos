@@ -24,9 +24,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Ejecutar tests
-        run: mvn test -B
+        run: mvn test -B -f guias-despacho/guias-despacho/pom.xml
       - name: Build JAR
-        run: mvn clean package -DskipTests -B
+        run: mvn clean package -DskipTests -B -f guias-despacho/guias-despacho/pom.xml
 
   docker:
     name: Docker Build and Push
@@ -44,7 +44,7 @@ jobs:
       - name: Build y Push imagen
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: guias-despacho/guias-despacho
           push: true
           tags: |
             ${{ env.DOCKER_IMAGE }}:latest
