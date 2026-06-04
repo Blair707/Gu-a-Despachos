@@ -8,6 +8,7 @@ import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,10 +27,6 @@ public class S3Service {
         this.s3Client = s3Client;
     }
 
-    /**
-     * Sube el PDF desde EFS a S3.
-     * La ruta en S3 sigue el patrón: /YYYYMMDD/transportistaX/guia123.pdf
-     */
     public String subirGuia(GuiaDespacho guia) {
         if (guia.getRutaEfs() == null || guia.getRutaEfs().isBlank()) {
             throw new BusinessException("La guía no tiene PDF generado en EFS. Genere el PDF primero.");
@@ -57,9 +54,6 @@ public class S3Service {
         return "s3://" + bucketName + "/" + s3Key;
     }
 
-    /**
-     * Descarga el PDF desde S3. Valida que la guía sea del transportista indicado.
-     */
     public byte[] descargarGuia(GuiaDespacho guia, String transportistaSolicitante) {
         if (!guia.getTransportista().equalsIgnoreCase(transportistaSolicitante)) {
             throw new BusinessException("No tiene permiso para descargar esta guía.");
@@ -87,9 +81,6 @@ public class S3Service {
         }
     }
 
-    /**
-     * Elimina el objeto en S3 asociado a la guía.
-     */
     public void eliminarDeS3(GuiaDespacho guia) {
         if (guia.getRutaS3() == null || guia.getRutaS3().isBlank()) return;
 
