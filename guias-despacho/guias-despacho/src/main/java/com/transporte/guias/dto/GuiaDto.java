@@ -13,9 +13,6 @@ import java.time.LocalDateTime;
 
 public class GuiaDto {
 
-    // ----------------------------------------
-    // Request: crear / actualizar guía
-    // ----------------------------------------
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -40,9 +37,6 @@ public class GuiaDto {
         private LocalDate fechaDespacho;
     }
 
-    // ----------------------------------------
-    // Response: datos de la guía
-    // ----------------------------------------
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

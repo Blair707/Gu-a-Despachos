@@ -126,7 +126,6 @@ public class PdfService {
         tabla.addCell(cValor);
     }
 
-    /** Retorna la ruta EFS esperada sin generar el archivo (para consultas). */
     public String getExpectedPath(GuiaDespacho guia) {
         return buildDirPath(guia) + "/guia_" + guia.getNumeroGuia() + ".pdf";
     }

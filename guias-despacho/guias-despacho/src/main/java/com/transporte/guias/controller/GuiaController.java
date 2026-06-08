@@ -27,9 +27,6 @@ public class GuiaController {
         this.guiaService = guiaService;
     }
 
-    // ----------------------------------------
-    // POST /api/guias — Crear guía
-    // ----------------------------------------
     @PostMapping
     @Operation(summary = "Crear una nueva guía de despacho",
                description = "Genera la guía, crea el PDF y lo guarda en el EFS")
@@ -39,9 +36,6 @@ public class GuiaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // ----------------------------------------
-    // POST /api/guias/{id}/upload — Subir a S3
-    // ----------------------------------------
     @PostMapping("/{id}/upload")
     @Operation(summary = "Subir la guía generada a AWS S3")
     public ResponseEntity<GuiaDto.Response> subirS3(
@@ -49,9 +43,6 @@ public class GuiaController {
         return ResponseEntity.ok(guiaService.subirGuiaS3(id));
     }
 
-    // ----------------------------------------
-    // GET /api/guias/{id}/download — Descargar PDF
-    // ----------------------------------------
     @GetMapping("/{id}/download")
     @Operation(summary = "Descargar la guía desde S3 con validación de permisos")
     public ResponseEntity<byte[]> descargar(
@@ -68,9 +59,6 @@ public class GuiaController {
         return ResponseEntity.ok().headers(headers).body(pdfBytes);
     }
 
-    // ----------------------------------------
-    // PUT /api/guias/{id} — Actualizar guía
-    // ----------------------------------------
     @PutMapping("/{id}")
     @Operation(summary = "Modificar o actualizar una guía existente")
     public ResponseEntity<GuiaDto.Response> actualizar(
@@ -79,9 +67,6 @@ public class GuiaController {
         return ResponseEntity.ok(guiaService.actualizarGuia(id, request));
     }
 
-    // ----------------------------------------
-    // DELETE /api/guias/{id} — Eliminar guía
-    // ----------------------------------------
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar una guía específica (también la elimina de S3)")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
@@ -89,9 +74,6 @@ public class GuiaController {
         return ResponseEntity.noContent().build();
     }
 
-    // ----------------------------------------
-    // GET /api/guias — Consultar guías
-    // ----------------------------------------
     @GetMapping
     @Operation(summary = "Consultar guías por transportista y/o fecha")
     public ResponseEntity<List<GuiaDto.Response>> consultar(
@@ -103,9 +85,6 @@ public class GuiaController {
         return ResponseEntity.ok(guiaService.consultarGuias(transportista, fecha));
     }
 
-    // ----------------------------------------
-    // GET /api/guias/{id} — Obtener por ID
-    // ----------------------------------------
     @GetMapping("/{id}")
     @Operation(summary = "Obtener una guía por su ID")
     public ResponseEntity<GuiaDto.Response> obtenerPorId(@PathVariable Long id) {

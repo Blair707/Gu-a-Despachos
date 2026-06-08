@@ -12,9 +12,6 @@ env:
 
 jobs:
 
-  # ----------------------------------------
-  # Job 1: Build y Tests
-  # ----------------------------------------
   build:
     name: Build y Test
     runs-on: ubuntu-latest
@@ -42,9 +39,6 @@ jobs:
           name: jar-build
           path: target/*.jar
 
-  # ----------------------------------------
-  # Job 2: Build y Push imagen Docker
-  # ----------------------------------------
   docker:
     name: Docker Build & Push
     runs-on: ubuntu-latest
@@ -70,9 +64,6 @@ jobs:
             ${{ env.DOCKER_IMAGE }}:latest
             ${{ env.DOCKER_IMAGE }}:${{ env.IMAGE_TAG }}
 
-  # ----------------------------------------
-  # Job 3: Deploy en EC2
-  # ----------------------------------------
   deploy:
     name: Deploy en EC2
     runs-on: ubuntu-latest

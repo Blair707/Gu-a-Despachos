@@ -30,9 +30,6 @@ public class GuiaService {
         this.s3Service   = s3Service;
     }
 
-    // ----------------------------------------
-    // Crear guía
-    // ----------------------------------------
     public GuiaDto.Response crearGuia(GuiaDto.Request request) {
         GuiaDespacho guia = GuiaDespacho.builder()
                 .numeroGuia(generarNumeroGuia(request))
@@ -53,9 +50,6 @@ public class GuiaService {
         return GuiaDto.Response.from(repository.save(guia));
     }
 
-    // ----------------------------------------
-    // Subir guía a S3
-    // ----------------------------------------
     public GuiaDto.Response subirGuiaS3(Long id) {
         GuiaDespacho guia = obtenerEntidad(id);
 
@@ -70,18 +64,12 @@ public class GuiaService {
         return GuiaDto.Response.from(repository.save(guia));
     }
 
-    // ----------------------------------------
-    // Descargar guía desde S3
-    // ----------------------------------------
     @Transactional(readOnly = true)
     public byte[] descargarGuia(Long id, String transportista) {
         GuiaDespacho guia = obtenerEntidad(id);
         return s3Service.descargarGuia(guia, transportista);
     }
 
-    // ----------------------------------------
-    // Actualizar guía
-    // ----------------------------------------
     public GuiaDto.Response actualizarGuia(Long id, GuiaDto.Request request) {
         GuiaDespacho guia = obtenerEntidad(id);
 
@@ -105,9 +93,6 @@ public class GuiaService {
         return GuiaDto.Response.from(repository.save(guia));
     }
 
-    // ----------------------------------------
-    // Eliminar guía
-    // ----------------------------------------
     public void eliminarGuia(Long id) {
         GuiaDespacho guia = obtenerEntidad(id);
 
@@ -119,9 +104,6 @@ public class GuiaService {
         repository.delete(guia);
     }
 
-    // ----------------------------------------
-    // Consultas
-    // ----------------------------------------
     @Transactional(readOnly = true)
     public GuiaDto.Response obtenerPorId(Long id) {
         return GuiaDto.Response.from(obtenerEntidad(id));
@@ -146,9 +128,6 @@ public class GuiaService {
                 .collect(Collectors.toList());
     }
 
-    // ----------------------------------------
-    // Helpers privados
-    // ----------------------------------------
     private GuiaDespacho obtenerEntidad(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Guía no encontrada con id: " + id));

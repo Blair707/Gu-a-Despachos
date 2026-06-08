@@ -26,8 +26,6 @@ public class AwsConfig {
     public S3Client s3Client() {
         AwsCredentialsProvider credentialsProvider;
 
-        // Si hay credenciales explícitas (desarrollo local), usarlas.
-        // En EC2 con IAM Role, se usa DefaultCredentialsProvider automáticamente.
         if (accessKey != null && !accessKey.isBlank()) {
             credentialsProvider = StaticCredentialsProvider.create(
                     AwsBasicCredentials.create(accessKey, secretKey));
