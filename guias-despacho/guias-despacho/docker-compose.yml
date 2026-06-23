@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+
+  # ================================
+  # Base de datos MySQL
+  # ================================
+  mysql:
+    image: mysql:8.0
+    container_name: guias-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: guias_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ================================
+  # Microservicio Spring Boot
+  # ================================
+  guias-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: guias-despacho-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      # Base de datos
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: guias_db
+      DB_USER: root
+      DB_PASSWORD: root
+      # AWS S3
+      AWS_S3_BUCKET: guias-despacho-bucket-b707
+      AWS_REGION: us-east-1
+      # EFS (dentro del contenedor)
+      EFS_MOUNT_PATH: /mnt/efs/guias
+      # Azure AD B2C
+      AZURE_TENANT_ID: 4ba371a5-2d60-4c43-bc38-a63974911ffb
+      AZURE_CLIENT_ID: 2d754c0b-38db-4f29-9ab8-81f0a7021f33
+    volumes:
+      - guias_pdfs:/mnt/efs/guias
+
+volumes:
+  mysql_data:
+  guias_pdfs:
